@@ -288,6 +288,11 @@ This system combines:
 - Local climate pattern integration
 - Regional yield variations
 
+## 🗃️ Dataset 
+[Download Dataset](https://drive.google.com/drive/folders/1IdKCtYuc8rJC4RPb7XCAujee2vTi9oqv?usp=drive_link)
+
+```
+
 ---
 
 **Built with ❤️ for Sri Lankan Farmers**
