@@ -1,0 +1,29 @@
+{
+  "v": 1,
+  "series": [
+    {
+      "indicatorId": "864",
+      "countryId": 154
+    }
+  ],
+  "styles": {
+    "864-154": {
+      "type": "bar",
+      "colorIndex": -1,
+      "lineStyle": null,
+      "lineWidth": 2,
+      "axis": "left",
+      "opacity": 1,
+      "hidden": false,
+      "legendLabel": "",
+      "legendHidden": false
+    }
+  },
+  "isStacked": false,
+  "lineLabels": true,
+  "paletteIndex": 0,
+  "xRange": null,
+  "title": "Rice Consumption (Total) in Sri Lanka",
+  "subtitle": "1961 - 2023, kt",
+  "legendGroupOverrides": {}
+}

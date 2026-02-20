@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Paddy Monitoring & Yield Risk Prediction System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --emerald-900: #064e3b;
+            --emerald-800: #065f46;
+            --emerald-700: #047857;
+            --emerald-600: #059669;
+            --emerald-500: #10b981;
+            --emerald-400: #34d399;
+            --emerald-300: #6ee7b7;
+            --emerald-200: #a7f3d0;
+            --emerald-100: #d1fae5;
+            --emerald-50: #ecfdf5;
+            --gold: #f59e0b;
+            --gold-light: #fbbf24;
+            --amber-50: #fffbeb;
+            --red-500: #ef4444;
+            --red-50: #fef2f2;
+            --blue-500: #3b82f6;
+            --blue-50: #eff6ff;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 20px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 40px rgba(6,78,59,0.12);
+            --shadow-xl: 0 20px 60px rgba(6,78,59,0.15);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f0fdf4;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated background */
+        .bg-pattern {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(5,150,105,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 60% 80%, rgba(52,211,153,0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .floating-leaf {
+            position: fixed;
+            opacity: 0.04;
+            font-size: 3rem;
+            z-index: 0;
+            animation: floatLeaf 20s ease-in-out infinite;
+            pointer-events: none;
+        }
+        .floating-leaf:nth-child(1) { top: 10%; left: 5%; animation-delay: 0s; animation-duration: 25s; }
+        .floating-leaf:nth-child(2) { top: 60%; left: 85%; animation-delay: -5s; animation-duration: 30s; }
+        .floating-leaf:nth-child(3) { top: 30%; left: 50%; animation-delay: -10s; animation-duration: 22s; }
+        .floating-leaf:nth-child(4) { top: 80%; left: 20%; animation-delay: -15s; animation-duration: 28s; }
+
+        @keyframes floatLeaf {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-30px) rotate(10deg); }
+            50% { transform: translateY(-15px) rotate(-5deg); }
+            75% { transform: translateY(-40px) rotate(8deg); }
+        }
+
+        /* ===== HERO HEADER (full-width) ===== */
+        .hero {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, var(--emerald-900) 0%, var(--emerald-700) 50%, var(--emerald-600) 100%);
+            color: var(--white);
+            padding: 70px 20px 60px;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%);
+            animation: heroShimmer 8s ease-in-out infinite;
+        }
+
+        @keyframes heroShimmer {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, -20px); }
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--emerald-400), var(--gold-light), var(--emerald-400));
+            background-size: 200% 100%;
+            animation: gradientSlide 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientSlide {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+            position: relative;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            animation: titleEntry 1s ease-out;
+        }
+
+        @keyframes titleEntry {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            letter-spacing: 0.5px;
+            position: relative;
+            max-width: 700px;
+            margin: 0 auto;
+            animation: subtitleEntry 1s ease-out 0.2s both;
+        }
+
+        @keyframes subtitleEntry {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 0.9; transform: translateY(0); }
+        }
+
+        .nav-pills {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 22px;
+            flex-wrap: wrap;
+            position: relative;
+            animation: subtitleEntry 1s ease-out 0.4s both;
+        }
+
+        .nav-pill {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 8px 20px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: default;
+        }
+
+        .nav-pill:hover {
+            background: rgba(255,255,255,0.22);
+            transform: translateY(-1px);
+        }
+
+        .scroll-hint {
+            margin-top: 30px;
+            animation: bounceDown 2s ease-in-out infinite;
+            font-size: 1.4rem;
+            opacity: 0.6;
+        }
+
+        @keyframes bounceDown {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(8px); }
+        }
+
+        /* ===== SINGLE-COLUMN SCROLLABLE CONTENT ===== */
+        .page-content {
+            position: relative;
+            z-index: 1;
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Section wrapper */
+        .section {
+            margin-top: 40px;
+            animation: sectionReveal 0.7s ease-out both;
+        }
+
+        .section:last-of-type {
+            margin-bottom: 40px;
+        }
+
+        @keyframes sectionReveal {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--emerald-800);
+            color: var(--white);
+            padding: 6px 18px;
+            border-radius: 100px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        /* Card */
+        .card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 20px;
+            padding: 36px;
+            box-shadow: var(--shadow-md);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--emerald-500), var(--emerald-300));
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--emerald-200);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .card h2 {
+            color: var(--emerald-800);
+            margin-bottom: 24px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid var(--emerald-100);
+            font-size: 1.4rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card h2 .icon-circle {
+            width: 36px; height: 36px;
+            background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+
+        /* ===== FORM ===== */
+        .form-group {
+            margin-bottom: 22px;
+            animation: fieldFadeIn 0.5s ease-out both;
+        }
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.15s; }
+        .form-group:nth-child(3) { animation-delay: 0.2s; }
+        .form-group:nth-child(4) { animation-delay: 0.25s; }
+        .form-group:nth-child(5) { animation-delay: 0.3s; }
+
+        @keyframes fieldFadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Two-column form row for compact fields */
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            letter-spacing: 0.01em;
+        }
+
+        label .required {
+            color: var(--emerald-500);
+            font-weight: 700;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px dashed var(--emerald-200);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            background: var(--emerald-50);
+            cursor: pointer;
+        }
+
+        input[type="file"]:hover {
+            border-color: var(--emerald-400);
+            background: var(--emerald-100);
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 13px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 0.95rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--white);
+            color: var(--gray-800);
+            font-family: inherit;
+        }
+
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--emerald-500);
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.1);
+        }
+
+        input[type="number"]:hover,
+        select:hover {
+            border-color: var(--emerald-300);
+        }
+
+        .image-preview {
+            margin-top: 16px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 2px solid var(--emerald-200);
+            display: none;
+            animation: previewReveal 0.5s ease-out;
+            box-shadow: var(--shadow-sm);
+            max-height: 300px;
+        }
+
+        @keyframes previewReveal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-height: 300px;
+            object-fit: cover;
+        }
+
+        /* ===== BUTTON ===== */
+        button {
+            background: linear-gradient(135deg, var(--emerald-600) 0%, var(--emerald-500) 100%);
+            color: var(--white);
+            padding: 16px 40px;
+            border: none;
+            border-radius: 14px;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 14px rgba(16,185,129,0.35);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.02em;
+            font-family: inherit;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(16,185,129,0.4);
+            background: linear-gradient(135deg, var(--emerald-700) 0%, var(--emerald-600) 100%);
+        }
+
+        button:hover::before { left: 100%; }
+
+        button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 14px rgba(16,185,129,0.35);
+        }
+
+        button:disabled {
+            background: var(--gray-300);
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+
+        @keyframes subtlePulse {
+            0%, 100% { box-shadow: 0 4px 14px rgba(16,185,129,0.35); }
+            50% { box-shadow: 0 4px 20px rgba(16,185,129,0.55); }
+        }
+
+        button.ready-pulse { animation: subtlePulse 2s ease-in-out infinite; }
+
+        /* ===== LOADING ===== */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner {
+            width: 48px; height: 48px;
+            border: 4px solid var(--emerald-100);
+            border-top: 4px solid var(--emerald-500);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .loading p {
+            color: var(--emerald-700);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .loading .pulse-dot {
+            display: inline-block;
+            animation: pulseDot 1.4s ease-in-out infinite;
+        }
+        .loading .pulse-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loading .pulse-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes pulseDot {
+            0%, 80%, 100% { opacity: 0.3; }
+            40% { opacity: 1; }
+        }
+
+        /* ===== SECTION DIVIDER ===== */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 44px 0 8px;
+            opacity: 0;
+            transition: opacity 0.6s;
+        }
+
+        .section-divider.visible { opacity: 1; }
+
+        .section-divider .line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--emerald-200), transparent);
+        }
+
+        .section-divider .dot {
+            width: 10px; height: 10px;
+            background: var(--emerald-400);
+            border-radius: 50%;
+            animation: pulseDotBg 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDotBg {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.3); opacity: 1; }
+        }
+
+        /* ===== RESULTS ===== */
+        .results-wrapper {
+            display: none;
+        }
+
+        .results-wrapper.show {
+            display: block;
+            animation: resultsReveal 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes resultsReveal {
+            from { opacity: 0; transform: translateY(30px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .result-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            padding: 28px;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-md);
+            animation: resultCardPop 0.5s ease-out both;
+        }
+
+        .result-card:nth-child(odd) { animation-delay: 0.1s; }
+        .result-card:nth-child(even) { animation-delay: 0.2s; }
+
+        @keyframes resultCardPop {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, var(--emerald-400), var(--emerald-600));
+            border-radius: 4px;
+        }
+
+        .result-card:hover {
+            border-color: var(--emerald-200);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+
+        .result-card h3 {
+            color: var(--emerald-800);
+            margin-bottom: 16px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .result-item:last-child { border-bottom: none; }
+
+        .result-label {
+            font-weight: 500;
+            color: var(--gray-600);
+            font-size: 0.95rem;
+        }
+
+        .result-value {
+            color: var(--emerald-700);
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        /* Confidence bar */
+        .confidence-bar {
+            background: var(--gray-100);
+            height: 28px;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-top: 12px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--emerald-600), var(--emerald-400));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        /* Risk badges */
+        .risk-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-top: 10px;
+            animation: badgePop 0.4s ease-out;
+        }
+
+        @keyframes badgePop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .risk-low {
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            color: var(--emerald-800);
+            border: 1px solid var(--emerald-300);
+        }
+
+        .risk-medium {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #92400e;
+            border: 1px solid #fbbf24;
+        }
+
+        .risk-high {
+            background: linear-gradient(135deg, #fecaca, #fca5a5);
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        /* Stats grid - 4 columns in single-column layout */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .stat-box {
+            background: var(--gray-50);
+            padding: 22px 16px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid var(--gray-100);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-box::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--emerald-400), var(--emerald-300));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .stat-box:hover {
+            border-color: var(--emerald-200);
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-2px);
+        }
+
+        .stat-box:hover::after { transform: scaleX(1); }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--emerald-700), var(--emerald-500));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            font-size: 0.82rem;
+            color: var(--gray-600);
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        /* Treatment list */
+        .treatment-list {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .treatment-list li {
+            padding: 12px 16px;
+            background: var(--gray-50);
+            margin-bottom: 8px;
+            border-radius: 12px;
+            border: 1px solid var(--gray-100);
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .treatment-list li:hover {
+            background: var(--emerald-50);
+            border-color: var(--emerald-200);
+            transform: translateX(4px);
+        }
+
+        .treatment-list li:before {
+            content: "\2713  ";
+            color: var(--emerald-500);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+
+        /* Info blocks */
+        .info-block {
+            background: var(--emerald-50);
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid var(--emerald-100);
+            transition: all 0.3s;
+        }
+
+        .info-block:hover { background: var(--emerald-100); }
+        .info-block strong { color: var(--emerald-800); }
+
+        .note-block {
+            background: var(--blue-50);
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #93c5fd;
+        }
+
+        .note-block strong { color: #1e40af; }
+        .note-block p { color: #1e3a5f; }
+
+        .resistant-block {
+            background: var(--emerald-50);
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid var(--emerald-200);
+        }
+
+        .susceptible-block {
+            background: #fffbeb;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #fde68a;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, var(--amber-50), #fef3c7);
+            padding: 20px;
+            border-radius: 14px;
+            border: 1px solid #fde68a;
+            margin-top: 18px;
+        }
+
+        .recommendations h4 { color: #92400e; margin-bottom: 10px; font-weight: 700; }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: var(--blue-50);
+            color: #1e40af;
+            border: 1px solid #93c5fd;
+        }
+
+        .alert-danger {
+            background: var(--red-50);
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(135deg, var(--emerald-900), var(--emerald-800));
+            color: var(--white);
+            text-align: center;
+            padding: 28px 20px;
+            margin-top: 48px;
+            font-size: 0.9rem;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--emerald-400), var(--gold-light), var(--emerald-400));
+            background-size: 200% 100%;
+            animation: gradientSlide 3s ease-in-out infinite;
+        }
+
+        footer p:first-child { font-weight: 600; letter-spacing: 0.02em; }
+        footer p:last-child { margin-top: 6px; opacity: 0.7; font-weight: 300; font-size: 0.85rem; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--gray-50); }
+        ::-webkit-scrollbar-thumb { background: var(--emerald-300); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--emerald-400); }
+
+        /* Tooltip */
+        [data-tooltip] { position: relative; }
+        [data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%; left: 50%;
+            transform: translateX(-50%);
+            background: var(--gray-800);
+            color: var(--white);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            animation: tooltipFade 0.2s ease-out;
+        }
+
+        @keyframes tooltipFade {
+            from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .card { padding: 24px; }
+            .result-card { padding: 20px; }
+            .stat-value { font-size: 1.5rem; }
+            .page-content { padding: 0 12px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-pattern"></div>
+    <div class="floating-leaf">&#127807;</div>
+    <div class="floating-leaf">&#127811;</div>
+    <div class="floating-leaf">&#127806;</div>
+    <div class="floating-leaf">&#127807;</div>
+
+    <!-- ===== HERO ===== -->
+    <div class="hero">
+        <h1>&#127806; Smart Paddy Monitoring System</h1>
+        <p>Data-Driven Disease Detection &amp; Yield Risk Prediction for Sri Lankan Agriculture</p>
+        <div class="nav-pills">
+            <span class="nav-pill">&#129440; Disease Detection</span>
+            <span class="nav-pill">&#128202; Yield Prediction</span>
+            <span class="nav-pill">&#9888;&#65039; Risk Analysis</span>
+            <span class="nav-pill">&#128138; Treatment Guide</span>
+        </div>
+        <div class="scroll-hint">&#8595;</div>
+    </div>
+
+    <!-- ===== SCROLLABLE SINGLE-COLUMN PAGE ===== -->
+    <div class="page-content">
+
+        <!-- SECTION 1: Upload & Configure -->
+        <div class="section" id="uploadSection">
+            <span class="section-label">&#128247; Step 1</span>
+            <div class="card">
+                <h2><span class="icon-circle">&#128248;</span> Upload &amp; Configure</h2>
+
+                <form id="predictionForm">
+                    <div class="form-group">
+                        <label for="imageInput">Rice Leaf Image <span class="required">*</span></label>
+                        <input type="file" id="imageInput" name="image" accept="image/*" required>
+                        <div id="imagePreview" class="image-preview">
+                            <img id="previewImg" src="" alt="Preview">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location">District / Location <span class="required">*</span></label>
+                            <select id="location" name="location_id" required>
+                                <option value="0">Colombo</option>
+                                <option value="1">Gampaha</option>
+                                <option value="2">Kalutara</option>
+                                <option value="3">Kandy</option>
+                                <option value="4">Matale</option>
+                                <option value="5">Nuwara Eliya</option>
+                                <option value="6">Galle</option>
+                                <option value="7">Matara</option>
+                                <option value="8">Hambantota</option>
+                                <option value="9">Jaffna</option>
+                                <option value="10">Kilinochchi</option>
+                                <option value="11">Mannar</option>
+                                <option value="12">Vavuniya</option>
+                                <option value="13">Mullaitivu</option>
+                                <option value="14">Batticaloa</option>
+                                <option value="15">Ampara</option>
+                                <option value="16">Trincomalee</option>
+                                <option value="17">Kurunegala</option>
+                                <option value="18">Puttalam</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="season">Cultivation Season <span class="required">*</span></label>
+                            <select id="season" name="season" required>
+                                <option value="Maha">Maha Season (Oct - Mar)</option>
+                                <option value="Yala">Yala Season (Apr - Sep)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="temperature">Average Temperature (&deg;C)</label>
+                            <input type="number" id="temperature" name="temperature" step="0.1" value="26.5" min="20" max="35">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rainfall">Annual Rainfall (mm)</label>
+                            <input type="number" id="rainfall" name="rainfall" step="10" value="1500" min="500" max="3000">
+                        </div>
+                    </div>
+
+                    <button type="submit" id="analyzeBtn">&#128269; Analyze &amp; Predict</button>
+                </form>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Analyzing image and predicting yield<span class="pulse-dot">.</span><span class="pulse-dot">.</span><span class="pulse-dot">.</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== RESULTS (appear below after analysis) ===== -->
+        <div class="results-wrapper" id="resultsWrapper">
+
+            <!-- Divider -->
+            <div class="section-divider visible">
+                <span class="line"></span>
+                <span class="dot"></span>
+                <span class="line"></span>
+            </div>
+
+            <!-- SECTION 2: Disease Detection -->
+            <div class="section" id="diseaseSection">
+                <span class="section-label">&#129440; Step 2</span>
+                <div class="result-card">
+                    <h3>&#129440; Disease Detection</h3>
+                    <div class="result-item">
+                        <span class="result-label">Detected Disease:</span>
+                        <span class="result-value" id="diseaseName">-</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Confidence Level:</span>
+                        <span class="result-value" id="confidence">-</span>
+                    </div>
+                    <div class="confidence-bar">
+                        <div class="confidence-fill" id="confidenceBar" style="width: 0%">0%</div>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Severity Level:</span>
+                        <span class="result-value" id="severity">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="section-divider visible">
+                <span class="line"></span>
+                <span class="dot"></span>
+                <span class="line"></span>
+            </div>
+
+            <!-- SECTION 3: Yield Prediction -->
+            <div class="section" id="yieldSection">
+                <span class="section-label">&#127806; Step 3</span>
+                <div class="result-card">
+                    <h3>&#127806; Yield Prediction</h3>
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <span class="stat-value" id="yieldValue">-</span>
+                            <span class="stat-label">Tons / Hectare</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="lossValue">-</span>
+                            <span class="stat-label">Yield Loss %</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="acreValue">-</span>
+                            <span class="stat-label">Tons / Acre</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-value" id="riskLevel">-</span>
+                            <span class="stat-label">Risk Level</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="section-divider visible">
+                <span class="line"></span>
+                <span class="dot"></span>
+                <span class="line"></span>
+            </div>
+
+            <!-- SECTION 4: Risk Assessment -->
+            <div class="section" id="riskSection">
+                <span class="section-label">&#9888;&#65039; Step 4</span>
+                <div class="result-card">
+                    <h3>&#9888;&#65039; Risk Assessment</h3>
+                    <div id="riskBadge"></div>
+                    <div class="recommendations">
+                        <h4>&#128203; Recommendations</h4>
+                        <p id="recommendation">-</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="section-divider visible">
+                <span class="line"></span>
+                <span class="dot"></span>
+                <span class="line"></span>
+            </div>
+
+            <!-- SECTION 5: Disease Profile & Treatment -->
+            <div class="section" id="treatmentSection" style="display: none;">
+                <span class="section-label">&#128138; Step 5</span>
+                <div class="result-card" id="treatmentCard">
+                    <h3>&#128138; Disease Profile &amp; Treatment</h3>
+                    <p id="diseaseDescription" style="margin-bottom: 14px; color: var(--gray-700); line-height: 1.6;">-</p>
+
+                    <!-- Top row: causative agent + conditions -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+                        <div class="info-block">
+                            <strong>&#129516; Causative Agent</strong>
+                            <p id="causativeAgent" style="font-style: italic; margin-top: 6px; color: var(--gray-700);">-</p>
+                        </div>
+                        <div class="info-block">
+                            <strong>&#127793; Affected Parts &amp; Stage</strong>
+                            <p id="affectedParts" style="margin-top: 6px; color: var(--gray-700);">-</p>
+                        </div>
+                    </div>
+
+                    <!-- Conditions row -->
+                    <div class="info-block" style="margin-bottom: 14px; border-left: 4px solid var(--emerald-400);">
+                        <strong>&#127777;&#65039; Favorable Conditions</strong>
+                        <div id="favorableConditions" style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">-</div>
+                    </div>
+
+                    <!-- Severity note -->
+                    <div id="severityNoteDiv" class="note-block" style="display: none; margin-bottom: 14px;">
+                        <strong>&#8505;&#65039; Note:</strong>
+                        <p id="severityNote" style="margin-top: 5px;">-</p>
+                    </div>
+
+                    <!-- Symptoms -->
+                    <div id="symptomsList" style="display: none; margin-bottom: 14px;">
+                        <h4 style="color: var(--emerald-800); margin-bottom: 10px; font-weight: 700;">&#128269; Symptoms:</h4>
+                        <ul class="treatment-list" id="symptomsUl"></ul>
+                    </div>
+
+                    <h4 style="color: var(--emerald-800); margin-bottom: 12px; font-weight: 700;">&#128300; Disease Management:</h4>
+                    <ul class="treatment-list" id="treatmentList"></ul>
+
+                    <!-- Resistant varieties -->
+                    <div id="resistantDiv" class="resistant-block" style="display: none; margin-top: 14px;">
+                        <strong style="color: var(--emerald-800);">&#9989; Resistant Varieties:</strong>
+                        <p id="resistantVarieties" style="margin-top: 6px; color: var(--emerald-700);">-</p>
+                    </div>
+
+                    <!-- Susceptible varieties -->
+                    <div id="susceptibleDiv" class="susceptible-block" style="display: none; margin-top: 12px;">
+                        <strong style="color: #92400e;">&#9888;&#65039; Susceptible Varieties:</strong>
+                        <p id="susceptibleVarieties" style="margin-top: 6px; color: #92400e;">-</p>
+                    </div>
+
+                    <p id="rrdiSourceLink" style="margin-top: 14px; font-size: 0.8rem; color: var(--gray-300); text-align: right; font-weight: 400;">
+                        Source: Dept. of Agriculture, Sri Lanka
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>&copy; 2026 Smart Paddy Monitoring System | Developed for Sri Lankan Agriculture</p>
+        <p>Powered by Statistical Modeling &amp; Image Analysis | Data: Dept. of Agriculture, Dept. of Meteorology, Census &amp; Statistics</p>
+    </footer>
+
+    <script>
+        // Image preview with pulse effect
+        document.getElementById('imageInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('analyzeBtn').classList.add('ready-pulse');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Form submission
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Show loading, hide previous results
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultsWrapper').classList.remove('show');
+            document.getElementById('analyzeBtn').disabled = true;
+            document.getElementById('analyzeBtn').classList.remove('ready-pulse');
+
+            // Prepare form data
+            const formData = new FormData();
+            formData.append('image', document.getElementById('imageInput').files[0]);
+            formData.append('location_id', document.getElementById('location').value);
+            formData.append('season', document.getElementById('season').value);
+            formData.append('temperature', document.getElementById('temperature').value);
+            formData.append('rainfall', document.getElementById('rainfall').value);
+
+            try {
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error connecting to server: ' + error.message);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('analyzeBtn').disabled = false;
+            }
+        });
+
+        function displayResults(data) {
+            // Disease Detection
+            document.getElementById('diseaseName').textContent = data.disease_detection.disease_name;
+            document.getElementById('confidence').textContent = data.disease_detection.confidence.toFixed(2) + '%';
+            document.getElementById('severity').textContent = data.disease_detection.severity;
+
+            // Confidence bar animation
+            setTimeout(function() {
+                var bar = document.getElementById('confidenceBar');
+                bar.style.width = data.disease_detection.confidence + '%';
+                bar.textContent = data.disease_detection.confidence.toFixed(1) + '%';
+            }, 100);
+
+            // Yield Prediction
+            document.getElementById('yieldValue').textContent = data.yield_prediction.predicted_yield_tons_per_ha.toFixed(2);
+            document.getElementById('lossValue').textContent = data.yield_prediction.yield_loss_percentage.toFixed(1) + '%';
+            document.getElementById('acreValue').textContent = data.yield_prediction.expected_production_per_acre.toFixed(2);
+
+            // Risk Assessment
+            var riskLevel = data.risk_assessment.overall_risk_level;
+            document.getElementById('riskLevel').textContent = riskLevel;
+
+            var riskClass = 'risk-low';
+            if (riskLevel === 'Medium') riskClass = 'risk-medium';
+            if (riskLevel === 'High') riskClass = 'risk-high';
+
+            document.getElementById('riskBadge').innerHTML =
+                '<span class="risk-badge ' + riskClass + '">Risk Level: ' + riskLevel + '</span>';
+
+            document.getElementById('recommendation').textContent = data.risk_assessment.recommendation;
+
+            // Treatment Actions
+            if (data.disease_detection.treatment && data.disease_detection.treatment.length > 0) {
+                document.getElementById('treatmentSection').style.display = 'block';
+                document.getElementById('diseaseDescription').textContent = data.disease_detection.description;
+
+                // Causative agent
+                if (data.disease_detection.causative_agent) {
+                    document.getElementById('causativeAgent').textContent = data.disease_detection.causative_agent;
+                }
+
+                // Affected parts & stage
+                var partsText = data.disease_detection.affected_parts || '';
+                if (data.disease_detection.affected_stages) {
+                    partsText += ' | Stage: ' + data.disease_detection.affected_stages;
+                }
+                document.getElementById('affectedParts').textContent = partsText || 'N/A';
+
+                // Favorable conditions
+                var conditions = data.disease_detection.favorable_conditions || {};
+                var condDiv = document.getElementById('favorableConditions');
+                condDiv.innerHTML = '';
+                var condMap = {
+                    'temperature': '\uD83C\uDF21\uFE0F Temp',
+                    'humidity': '\uD83D\uDCA7 Humidity',
+                    'rainfall': '\uD83C\uDF27\uFE0F Rainfall',
+                    'other': '\uD83D\uDCDD Other'
+                };
+                for (var key in condMap) {
+                    if (conditions[key]) {
+                        var span = document.createElement('div');
+                        span.innerHTML = '<strong>' + condMap[key] + ':</strong> ' + conditions[key];
+                        span.style.fontSize = '0.9rem';
+                        condDiv.appendChild(span);
+                    }
+                }
+                if (condDiv.children.length === 0) {
+                    condDiv.textContent = 'N/A';
+                }
+
+                // Severity note
+                if (data.disease_detection.severity_note) {
+                    document.getElementById('severityNoteDiv').style.display = 'block';
+                    document.getElementById('severityNote').textContent = data.disease_detection.severity_note;
+                } else {
+                    document.getElementById('severityNoteDiv').style.display = 'none';
+                }
+
+                // Symptoms list
+                var symptomsList = data.disease_detection.symptoms_list || [];
+                if (symptomsList.length > 0) {
+                    document.getElementById('symptomsList').style.display = 'block';
+                    var sympUl = document.getElementById('symptomsUl');
+                    sympUl.innerHTML = '';
+                    symptomsList.forEach(function(symp) {
+                        var li = document.createElement('li');
+                        li.textContent = symp;
+                        sympUl.appendChild(li);
+                    });
+                } else {
+                    document.getElementById('symptomsList').style.display = 'none';
+                }
+
+                // Treatment list
+                var treatmentList = document.getElementById('treatmentList');
+                treatmentList.innerHTML = '';
+                data.disease_detection.treatment.forEach(function(treatment) {
+                    var li = document.createElement('li');
+                    if (treatment === '--- For next season ---') {
+                        li.innerHTML = '<strong style="color: var(--emerald-700);">\uD83D\uDCC5 For Next Season:</strong>';
+                        li.style.listStyle = 'none';
+                        li.style.marginTop = '10px';
+                        li.style.marginLeft = '-20px';
+                    } else {
+                        li.textContent = treatment;
+                    }
+                    treatmentList.appendChild(li);
+                });
+
+                // Resistant varieties
+                var resistant = data.disease_detection.resistant_varieties || [];
+                if (resistant.length > 0) {
+                    document.getElementById('resistantDiv').style.display = 'block';
+                    document.getElementById('resistantVarieties').textContent = resistant.join(', ');
+                } else {
+                    document.getElementById('resistantDiv').style.display = 'none';
+                }
+
+                // Susceptible varieties
+                var varieties = data.disease_detection.susceptible_varieties || [];
+                if (varieties.length > 0) {
+                    document.getElementById('susceptibleDiv').style.display = 'block';
+                    document.getElementById('susceptibleVarieties').textContent = varieties.join(', ');
+                } else {
+                    document.getElementById('susceptibleDiv').style.display = 'none';
+                }
+
+                // Source link
+                var url = data.disease_detection.url;
+                if (url) {
+                    document.getElementById('rrdiSourceLink').innerHTML =
+                        'Source: <a href="' + url + '" target="_blank" style="color: var(--emerald-400); text-decoration: none;">Dept. of Agriculture, Sri Lanka \u2197</a>';
+                }
+            }
+
+            // Show results and scroll down smoothly
+            document.getElementById('resultsWrapper').classList.add('show');
+
+            setTimeout(function() {
+                document.getElementById('diseaseSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+        }
+    </script>
+</body>
+</html>

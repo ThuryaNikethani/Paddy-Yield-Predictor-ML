@@ -1,0 +1,75 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+*.pkl
+*.h5
+*.keras
+*.ckpt
+*.ckpt.index
+*.weights
+*.pt
+*.pth
+*.onnx
+*.tflite
+*.pb
+*.sav
+*.tar.gz
+*.zip
+*.tar
+*.7z
+*.log
+*.tmp
+*.bak
+*.swp
+*.DS_Store
+*.egg-info/
+pip-wheel-metadata/
+build/
+dist/
+.env
+.env.*
+!README.md
+
+# Virtualenvs
+venv/
+.venv/
+ENV/
+env/
+
+# Ignore all models and checkpoints
+models/
+
+# Datasets and data folders
+Soil Test/
+Soil Train/
+rice leaf diseases dataset/
+data/
+datasets/
+raw_data/
+processed_data/
+
+# Ignore uploads and outputs
+uploads/
+training_output.txt
+
+# Ignore common data files (keep if you intentionally want to track specific CSV/JSON)
+*.pdf
+*.csv
+*.xml
+*.json
+
+# Notebook / IDE
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# Static / generated
+static/charts/
+
+# OS-specific files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
