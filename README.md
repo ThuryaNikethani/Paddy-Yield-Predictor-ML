@@ -42,6 +42,9 @@ A comprehensive AI-powered web application for rice disease detection and yield 
 - **Brown Spot**: Multiple samples
 - **Leaf Smut**: Comprehensive collection
 
+## 🗃️ Dataset 
+[Download Dataset](https://drive.google.com/drive/folders/1IdKCtYuc8rJC4RPb7XCAujee2vTi9oqv?usp=drive_link)
+
 ### Weather & Climate Data
 - Location-specific data for 19 Sri Lankan districts
 - Temperature, rainfall, wind speed, humidity
@@ -288,8 +291,6 @@ This system combines:
 - Local climate pattern integration
 - Regional yield variations
 
-## 🗃️ Dataset 
-[Download Dataset](https://drive.google.com/drive/folders/1IdKCtYuc8rJC4RPb7XCAujee2vTi9oqv?usp=drive_link)
 
 ```
 
