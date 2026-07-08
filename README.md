@@ -1,6 +1,6 @@
 # Smart Paddy Monitoring and Yield Risk Prediction System
 
-A comprehensive AI-powered web application for rice disease detection and yield prediction, specifically designed for Sri Lankan agricultural conditions.
+A comprehensive web application for rice disease detection and yield prediction, specifically designed for Sri Lankan agricultural conditions.
 
 ## 🌟 Features
 
