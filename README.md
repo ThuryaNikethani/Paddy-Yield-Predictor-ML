@@ -293,6 +293,9 @@ This system combines:
 
 
 ```
+## 👥 Author
+
+Thurya Nikethani
 
 ---
 
