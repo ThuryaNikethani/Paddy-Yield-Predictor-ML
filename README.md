@@ -291,11 +291,12 @@ This system combines:
 - Local climate pattern integration
 - Regional yield variations
 
+---
 
-```
-## 👥 Author
 
-Thurya Nikethani
+## 👥 Authors
+
+- [Thurya Nikethani](https://github.com/ThuryaNikethani)
 
 ---
 
