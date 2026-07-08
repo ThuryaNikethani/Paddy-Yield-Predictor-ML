@@ -294,7 +294,7 @@ This system combines:
 ---
 
 
-## 👥 Authors
+## 👥 Author
 
 - [Thurya Nikethani](https://github.com/ThuryaNikethani)
 
